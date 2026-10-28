@@ -9,25 +9,48 @@ import ChatContainer from "../components/ChatContainer";
 import NoConversationPlaceholder from "../components/NoConversationPlaceholder";
 
 function ChatPage() {
-  const { activeTab,selectedUser }=useChatStore();
+  const { activeTab, selectedUser } = useChatStore();
+
   return (
-    <div className="relative w-full max-w-6xl h-[800px]">
+    <div className="w-full max-w-6xl h-screen md:h-[calc(100vh-2rem)]">
       <BorderAnimatedContainer>
-        <div className="w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col">
+
+        {/*
+          Mobile: show sidebar OR chat (never both).
+          Desktop (md+): show both side-by-side.
+        */}
+
+        {/* ── SIDEBAR ── */}
+        {/* On mobile, hide sidebar when a user is selected */}
+        <div
+          className={`
+            ${selectedUser ? 'hidden' : 'flex'} md:flex
+            w-full md:w-72 lg:w-80 flex-shrink-0
+            bg-slate-800/50 backdrop-blur-sm flex-col overflow-hidden
+            border-r border-slate-700/30
+          `}
+        >
           <ProfileHeader />
           <ActiveTabSwitch />
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
-            {activeTab==="chats"?<ChatsList />:<ContactList />}
+          <div className="flex-1 overflow-y-auto p-3 space-y-2">
+            {activeTab === "chats" ? <ChatsList /> : <ContactList />}
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm">
-           {selectedUser?<ChatContainer/>:<NoConversationPlaceholder/>}
+        {/* ── MAIN CHAT AREA ── */}
+        {/* On mobile, hide chat area when no user is selected */}
+        <div
+          className={`
+            ${selectedUser ? 'flex' : 'hidden'} md:flex
+            flex-1 flex-col bg-slate-900/50 backdrop-blur-sm min-w-0 overflow-hidden
+          `}
+        >
+          {selectedUser ? <ChatContainer /> : <NoConversationPlaceholder />}
         </div>
+
       </BorderAnimatedContainer>
     </div>
-  )
+  );
 }
 
 export default ChatPage;
