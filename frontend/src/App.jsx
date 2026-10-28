@@ -16,32 +16,32 @@ function App() {
     checkAuth();
   },[checkAuth]);
 
-  console.log(authUser);
-
   if(isCheckingAuth) return <PageLoader/>
 
   return (
-    <div className="min-h-screen bg-slate-900 relative flex items-center justify-center p-4 overflow-hidden ">
-       <div style={{ width: '100%', height: '600px', position: 'absolute' }}>
-             <DotGrid
-                dotSize={4}
-                gap={15}
-                baseColor="#2F293A"
-                activeColor="#b81ce4"
-                proximity={140}
-                shockRadius={480}
-                shockStrength={1}
-                resistance={800}
-                returnDuration={1.4}
-              />
-         </div>
+    <div className="h-screen bg-slate-900 relative flex items-center justify-center overflow-hidden">
+      {/* Full-screen animated dot background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <DotGrid
+          dotSize={4}
+          gap={15}
+          baseColor="#2F293A"
+          activeColor="#b81ce4"
+          proximity={140}
+          shockRadius={480}
+          shockStrength={1}
+          resistance={800}
+          returnDuration={1.4}
+        />
+      </div>
 
-       <div className="relative z-10">
+      {/* Page content - centered, padded, never overflows */}
+      <div className="relative z-10 w-full h-full flex items-center justify-center md:p-4">
         <Routes>
-        <Route path='/' element={ authUser?<ChatPage/>:<Navigate to={"/login"}/> }  />
-        <Route path='/login' element={authUser? <Navigate to={"/"}/>:<LoginPage/>}  />
-        <Route path='/signup' element={ authUser? <Navigate to={"/"}/>:<SignUpPage/> } />
-     </Routes>
+          <Route path='/' element={ authUser?<ChatPage/>:<Navigate to={"/login"}/> } />
+          <Route path='/login' element={authUser? <Navigate to={"/"}/> :<LoginPage/>} />
+          <Route path='/signup' element={ authUser? <Navigate to={"/"}/> :<SignUpPage/> } />
+        </Routes>
       </div>
 
       <Toaster/>
